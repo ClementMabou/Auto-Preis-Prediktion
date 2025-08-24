@@ -32,7 +32,6 @@ Sie ist wichtig um einzelne Variable zu verstehen (Wertebereiche, Skalierung, ve
    - Histogramme, 
    - density plot  
 
-
 3.**Multivariate Datenanalyse**
 
 Sie dient dazu, Zusammenhänge zwischen der Zielvariable und Prädiktoren zu erkennen.
