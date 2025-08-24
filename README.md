@@ -66,6 +66,10 @@ Das Bild zeigt Scatterplots, in denen der Autopreis mit verschiedenen quantitati
 Der Korrelationsplot zeigt Stärke und Richtung linearer Zusammenhänge. Die Zielvariable „Preis“ korreliert stark positiv mit Motorgröße (0,88), Gewicht (0,88), PS (0,82) usw., und stark negativ mit Verbrauch auf Autobahn (-0,74) und in der Stadt (-0,76). Hohe Korrelationen zwischen Prädiktoren, z. B. Gewicht und Motorgröße (0,88) oder Verbrauchsvariablen (0,97), weisen auf Multikollinearität hin, die bei linearen Modellen berücksichtigt werden muss.
 
 ![alt text](image-9.png)
+
+Die Boxplots zeigen, dass der Autopreis stark von Merkmalen wie Hersteller, Karosserieform, Antriebstyp und Motortechnik abhängt. teurere Autos stammen meist von renommierten Marken (z. B. Jaguar, Mercedes-Benz, Porsche), nutzen häufig Diesel, haben Karosserien wie Hardtop oder convertible, verfügen über Heckantrieb, Turbolader und moderne Motorsteuerung, während günstigere Fahrzeuge meist Kleinwagen  mit einfacheren Antriebs- und Motorkonfigurationen sind. Insgesamt spiegeln höhere Preise sowohl technische Leistungsfähigkeit als auch Luxus wider. 
+Viele kategoriale Variablen weisen zahlreiche Ausprägungen auf. Um die Anzahl der Dummy-Variablen in späteren Modellen zu reduzieren, wurden ähnliche Kategorien(solche mit vergleichbarer Erklärungsstärke für den Preis) per Binning zu Gruppen zusammengefasst.
+
 ![alt text](image-10.png)
 ![alt text](image-11.png)
 ![alt text](image-12.png)
