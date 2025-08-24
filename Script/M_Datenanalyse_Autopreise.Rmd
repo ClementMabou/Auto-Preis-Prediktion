@@ -5,10 +5,6 @@ date: "2025-08-02"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 
 #  benötigte Pakete importieren und installieren 
 
@@ -62,13 +58,14 @@ cars_df <- read_csv("C:\\Users\\cleme\\Desktop\\Multivariate_Datenanalyse\\Daten
 # Datenexploration
   ## Daten ansehen
 # View(cars_df)
+head(cars_df)
 cars_df$...1  <- NULL
  
 ```
 
 # B. Datenbereinigung
 
-##B.1 Duplikate ?
+## B.1 Duplikate ?
 
 ```{r}
 cars_df[duplicated(cars_df),]
