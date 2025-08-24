@@ -61,8 +61,10 @@ Die Zielvariable „Preis“ ist rechtsschief (Mittelwert 12.829 > Median 10.245
 
 Das Bild zeigt Scatterplots, in denen der Autopreis mit verschiedenen quantitativen Merkmalen verglichen wird. Starke positive lineare Zusammenhänge zeigen Preis mit motor_groesse, gewicht , PS , anzahl_zylinder , laenge , radstand  und kolben_durchmesser; starke negative Zusammenhänge treten bei Verbrauch (Stadt/Autobahn) auf. Bei anderen Variablen wie maximale_drehzahl oder Kompressionsrate sind die Zusammenhänge schwach oder nichtlinear.
 
-
 ![alt text](image-8.png)
+
+Der Korrelationsplot zeigt Stärke und Richtung linearer Zusammenhänge. Die Zielvariable „Preis“ korreliert stark positiv mit Motorgröße (0,88), Gewicht (0,88), PS (0,82) usw., und stark negativ mit Verbrauch auf Autobahn (-0,74) und in der Stadt (-0,76). Hohe Korrelationen zwischen Prädiktoren, z. B. Gewicht und Motorgröße (0,88) oder Verbrauchsvariablen (0,97), weisen auf Multikollinearität hin, die bei linearen Modellen berücksichtigt werden muss.
+
 ![alt text](image-9.png)
 ![alt text](image-10.png)
 ![alt text](image-11.png)
