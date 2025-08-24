@@ -166,7 +166,7 @@ colSums(is.na(cars_df))                            # Prüft erneut die Anzahl de
 ```
 
 
-## B.5   Außreiser ?
+## B.5   Außreiser 
 ### B.5.1   Außreiser ?
 
 ```{r}
