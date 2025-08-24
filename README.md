@@ -17,7 +17,7 @@ Dieses Studienprojekt untersucht, welche Faktoren den Preis von Automobilen best
   - 8 qualitative Prädiktoren : z. B. Hersteller, Karosserieform, Kraftstoffart, Antriebstyp  
 - **Zielvariable:** preis  
 
-## Vorgehen
+## Vorgehenweise
 1. **Datenbereinigung**  
    - Entfernung von Duplikaten 
    - Ersetzung unlogischer Werte (z. B. ? → NA)  
