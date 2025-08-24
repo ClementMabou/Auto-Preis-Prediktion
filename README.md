@@ -52,7 +52,9 @@ Dieses Studienprojekt untersucht, welche Faktoren den Preis von Automobilen best
    - Trainings-/Testsplit (80/20)  
    - Performance-Bewertung: R2 auf train und Testdaten  
 
-## Ergebnisse 
+## Ergebnisse und Ableitung von Aussagen
+unter jeder Abbildung gibt es seine Interpretation.
+
 ![alt text](image.png)
 
 Die Zielvariable „Preis“ ist rechtsschief (Mittelwert 12.829 > Median 10.245), wobei 75 % der Autos unter 16.515 liegen. Einige teure Fahrzeuge erhöhen den Mittelwert. Eine Transformation (Logarithmus oder Quadratwurzel) kann die Schiefe reduzieren, während die hohe Standardabweichung (6.792,89) die große Preisspanne zeigt.
@@ -77,25 +79,30 @@ Die Boxplots nach dem Binning zeigen, dass die Erklärungsstärke der neuen Ausp
 
 ![alt text](image-11.png)
 
-Dieses Modell basiert auf der Quadratwurzel-Transformation der Zielvariable (Preis) aus einem ersten Modell, um die Voraussetzungen der multiplen linearen Regression zu verbessern. Es umfasst deutlich weniger Merkmale als die ursprüngliche Menge potenzieller Prädiktoren, was die Interpretierbarkeit erhöht, und weist gleichzeitig eine sehr hohe Güte auf: Mit einem R² von 0,9249 (angepasst 0,9202) erklärt es über 92 % der Varianz. Variablen wie Motoraufladung (Turbo), Antriebstyp (rwd), Motorposition (rear), Breite, Anzahl_zylinder und Motorgröße wirken positiv auf die Autopreise, während eine höhere Kraftstoffeffizienz (Autobahn-mpg) sowie bestimmte Hersteller-Dummies (MS: Marken im mittleren Preissegment, NS: Marken im niedrigen Preissegment) negative Effekte zeigen.
+Dieses Modell basiert auf der Quadratwurzel-Transformation der Zielvariable (Preis) aus einem ersten Modell, um die Voraussetzungen der multiplen linearen Regression zu verbessern. Es umfasst deutlich weniger Merkmale als die ursprüngliche Menge potenzieller Prädiktoren, was die Interpretierbarkeit erhöht, und weist gleichzeitig eine sehr hohe Güte auf: Mit einem R² von 0,9249 (angepasst 0,9202) erklärt es über 92 % der Varianz. Variablen wie Motoraufladung (Turbo), Antriebstyp (rwd), Motorposition (rear), Breite, Zylinderzahl und Motorgröße wirken positiv auf die Autopreise, während eine höhere Kraftstoffeffizienz (Autobahn-mpg) sowie bestimmte Hersteller-Dummies (MS: Marken im mittleren Preissegment, NS: Marken im niedrigen Preissegment) negative Effekte zeigen.
 
 ![alt text](image-12.png)
+
+Die Modellannahmen sind weitgehend erfüllt: Die Plots „Residuals vs. Fitted“ und „Scale-Location“ zeigen nur geringe Abweichungen von Linearität und Homoskedastizität. Der Q-Q-Plot bestätigt die Normalverteilung der Residuen mit leichten Abweichungen an den Extremwerten.
+
+
 ![alt text](image-6.png)
+
+Das Modell zeigt eine sehr gute Vorhersagekraft: Es erklärt 92,7 % der Varianz in den Trainingsdaten und 94,4 % in den Testdaten. Die ähnliche oder sogar leicht bessere Leistung im Testset deutet darauf hin, dass das Modell robust ist und gut generalisiert, ohne Anzeichen von Overfitting. Insgesamt liefert es konsistente und zuverlässige Preisvorhersagen.
+
+
 ![alt text](image-13.png)
 
-- **Starke Einflussfaktoren:** Motorgröße, Gewicht, PS, Verbrauch, Herstellersegment  
-- **Negativer Zusammenhang:** Höherer Preis ↔ schlechtere Kraftstoffeffizienz  
-- **Bestes Modell:** Transformierte multiple Regression mit hoher Prognosegüte  
+Die Plots zeigen, dass die vorhergesagten Preise den tatsächlichen Werten sowohl im Trainings- als auch im Testset sehr nahekommen. Die ähnliche Verteilung im Testset bestätigt hohe Genauigkeit und gute Generalisierung des Modells. Insgesamt visualisieren die Plots die sehr gute Leistungsfähigkeit des Modells und stimmen mit den R²-Werten aus der Performance-Tabelle überein.
+
 
 ## Ausblick
 - Erweiterung um nichtlineare Modelle (z. B. Random Forest, Gradient Boosting)  
 - Einbezug größerer und aktuellerer Fahrzeugdatensätze  
-- Anwendung für Preisprognosen in Echtzeit (z. B. Gebrauchtwagenportale)  
 
 ## Technologien
-- **Programmiersprache:** R / Python (abhängig von Umsetzung)  
-- **Methoden:** Explorative Datenanalyse, Korrelationsanalyse, multiple lineare Regression, Modellvalidierung  
-- **Bibliotheken:** pandas, numpy, matplotlib, seaborn, scikit-learn (bei Python)  
+- **Programmiersprache:** R   
+- **Bibliotheken:** tidyverse, readxl, plotly, skimr, car, corrplot, vcd, dplyr, broom, stringr, purrr, caret, VIM, patchwork, MASS, leaps 
 
 
 
