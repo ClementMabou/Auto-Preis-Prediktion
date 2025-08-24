@@ -26,6 +26,7 @@ Dieses Studienprojekt untersucht, welche Faktoren den Preis von Automobilen best
    - Ersetzung von Ausreißern nach der IQR-Regel durch die Werte des ersten bzw. dritten Quartils.  
 
 2. **Univariate Datenanalyse**
+
 Sie ist wichtig um einzelne Variable zu verstehen (Wertebereiche, Skalierung, verteilung). Sie bildet eine wichtige Grundlage, um notwendige Transformationen in späteren Analyseschritten vorzunehmen. 
    - Descriptive Statistik, 
    - Histogramme, 
@@ -33,22 +34,22 @@ Sie ist wichtig um einzelne Variable zu verstehen (Wertebereiche, Skalierung, ve
 
 
 3.**Multivariate Datenanalyse**
+
 Sie dient dazu, Zusammenhänge zwischen der Zielvariable und Prädiktoren zu erkennen.
    - Scatterplots
    - Korrelationsplot  
    - Boxplots    
-
-3. **Feature Engineering**
+4. **Feature Engineering**
    - Transformation von Merkmalen: Kategorien qualitativer Merkmale werden nach ihrer Einflussstärke auf die Zielvariable Preis     zusammengefasst (Binning), um die Anzahl der Kategorien zu reduzieren.
    - erste Merksmalauswahl:Prädiktoren mit schwacher Korrelation zur Zielvariable (r < 0,2) werden entfernt; bei stark korrelierten Prädiktoren untereinander (r ≥ 0,8) wird einer entfernt.
    - zweite Merkmalauswahl: Stepwise-Regression mit Forward- und Backward-Selection unter Verwendung des AIC-Kriteriums.
 
-4. **Modellbildung**  
+5. **Modellbildung**  
    - Multiple lineare Regression   
    - Überprüfung der Modellannahmen (Linearität, Homoskedastizität, Normalverteilung)  
    - Transformation der Zielvariablen (Box-Cox) zur verbesserung des Modells 
 
-5. **Modellvalidierung**  
+6. **Modellvalidierung**  
    - Trainings-/Testsplit (80/20)  
    - Performance-Bewertung: R2 auf train und Testdaten  
 
