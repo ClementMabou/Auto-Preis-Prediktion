@@ -2,7 +2,7 @@
 # Datenanalyse & Machine Learning zur Preisprognose von Automobilen
 
 ## Überblick
-Dieses Studienprojekt untersucht, welche Faktoren den Preis von Automobilen bestimmen und nutzt diese zur Prognose von Fahrzeugpreisen mittels Machine Learning.  Dazu wurde ein Datensatz mit über 200 Fahrzeugen und 25 Variablen analysiert, bereinigt und modelliert.
+Dieses Studienprojekt untersucht, welche Faktoren den Preis von Automobilen bestimmen und nutzt diese zur Prognose von Fahrzeugpreisen mittels Machine Learning.  Dazu wurde ein Datensatz mit über 200 Fahrzeugen und 25 Variablen bereinigt, analysiert und modelliert.
 
 ## Ziele
 - Datenbereinigung und Datenaufbereitung 
