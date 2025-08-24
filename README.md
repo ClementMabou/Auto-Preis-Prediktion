@@ -26,14 +26,14 @@ Dieses Studienprojekt untersucht, welche Faktoren den Preis von Automobilen best
    - Ersetzung von Ausreißern nach der IQR-Regel durch die Werte des ersten bzw. dritten Quartils.  
 
 2. **Univariate Datenanalyse**
-    Sie ist wichtig um einzelne Variable zu verstehen (Wertebereiche, Skalierung, verteilung). Sie bildet eine wichtige Grundlage, um notwendige Transformationen in späteren Analyseschritten vorzunehmen. 
+Sie ist wichtig um einzelne Variable zu verstehen (Wertebereiche, Skalierung, verteilung). Sie bildet eine wichtige Grundlage, um notwendige Transformationen in späteren Analyseschritten vorzunehmen. 
    - Descriptive Statistik, 
    - Histogramme, 
    - density plot  
 
 
 3.**Multivariate Datenanalyse**
-   Sie dient dazu, Zusammenhänge zwischen der Zielvariable und Prädiktoren zu erkennen.
+Sie dient dazu, Zusammenhänge zwischen der Zielvariable und Prädiktoren zu erkennen.
    - Scatterplots
    - Korrelationsplot  
    - Boxplots    
@@ -91,7 +91,7 @@ Die Modellannahmen sind weitgehend erfüllt: Die Plots „Residuals vs. Fitted�
 Das Modell zeigt eine sehr gute Vorhersagekraft: Es erklärt 92,7 % der Varianz in den Trainingsdaten und 94,4 % in den Testdaten. Die ähnliche oder sogar leicht bessere Leistung im Testset deutet darauf hin, dass das Modell robust ist und gut generalisiert, ohne Anzeichen von Overfitting. Insgesamt liefert es konsistente und zuverlässige Preisvorhersagen.
 
 
-![alt text](image-13.png)
+![alt text](image-14.png)
 
 Die Plots zeigen, dass die vorhergesagten Preise den tatsächlichen Werten sowohl im Trainings- als auch im Testset sehr nahekommen. Die ähnliche Verteilung im Testset bestätigt hohe Genauigkeit und gute Generalisierung des Modells. Insgesamt visualisieren die Plots die sehr gute Leistungsfähigkeit des Modells und stimmen mit den R²-Werten aus der Performance-Tabelle überein.
 
