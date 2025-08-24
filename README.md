@@ -54,6 +54,7 @@ Dieses Studienprojekt untersucht, welche Faktoren den Preis von Automobilen best
 
 ## Ergebnisse
 ![alt text](image.png)
+Die Zielvariable „Preis“ ist rechtsschief (Mittelwert 12.829 > Median 10.245) mit den meisten Autos unter 15.000. Einige teure Fahrzeuge verzerren den Mittelwert. Eine Transformation (Logarithmus/Quadratwurzel) kann die Schiefe reduzieren; die hohe Standardabweichung (6.792,89) zeigt große Preisspanne.
 ![alt text](image-1.png)
 ![alt text](image-8.png)
 ![alt text](image-9.png)
