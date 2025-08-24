@@ -52,14 +52,15 @@ Dieses Studienprojekt untersucht, welche Faktoren den Preis von Automobilen best
    - Trainings-/Testsplit (80/20)  
    - Performance-Bewertung: R2 auf train und Testdaten  
 
-## Ergebnisse
+## Ergebnisse 
 ![alt text](image.png)
 
 Die Zielvariable „Preis“ ist rechtsschief (Mittelwert 12.829 > Median 10.245), wobei 75 % der Autos unter 16.515 liegen. Einige teure Fahrzeuge erhöhen den Mittelwert. Eine Transformation (Logarithmus oder Quadratwurzel) kann die Schiefe reduzieren, während die hohe Standardabweichung (6.792,89) die große Preisspanne zeigt.
 
 ![alt text](image-1.png)
 
-Das Bild zeigt Scatterplots, in denen der Autopreis mit verschiedenen quantitativen Merkmalen verglichen wird. Starke positive Zusammenhänge zeigen Preissteigerungen mit Gewicht, PS und Motorgröße, starke negative Zusammenhänge treten bei Verbrauch (Stadt/Autobahn) auf. Bei anderen Variablen wie maximale Drehzahl oder Kompressionsrate sind die Zusammenhänge schwach oder nichtlinear.
+Das Bild zeigt Scatterplots, in denen der Autopreis mit verschiedenen quantitativen Merkmalen verglichen wird. Starke positive lineare Zusammenhänge zeigen Preis mit motor_groesse, gewicht , PS , anzahl_zylinder , laenge , radstand  und kolben_durchmesser; starke negative Zusammenhänge treten bei Verbrauch (Stadt/Autobahn) auf. Bei anderen Variablen wie maximale_drehzahl oder Kompressionsrate sind die Zusammenhänge schwach oder nichtlinear.
+
 
 ![alt text](image-8.png)
 ![alt text](image-9.png)
