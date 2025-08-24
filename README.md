@@ -11,7 +11,7 @@ Dieses Studienprojekt untersucht, welche Faktoren den Preis von Automobilen best
 - Evaluierung und Optimierung der Regressionsmodelle 
 
 ## Datengrundlage
-- **Datensatz:** `autos.csv` mit >200 Fahrzeugen  
+- **Datensatz:** `autos.csv` mit 200 Fahrzeugen  
 - **Prädiktoren :**  
   - 16 quantitative Prädiktoren: z. B. Motorgröße, Gewicht, PS, Verbrauch  
   - 8 qualitative Prädiktoren : z. B. Hersteller, Karosserieform, Kraftstoffart, Antriebstyp  
