@@ -68,6 +68,7 @@ Der Korrelationsplot zeigt Stärke und Richtung linearer Zusammenhänge. Die Zie
 ![alt text](image-9.png)
 
 Die Boxplots zeigen, dass der Autopreis stark von Merkmalen wie Hersteller, Karosserieform, Antriebstyp und Motortechnik abhängt. teurere Autos stammen meist von renommierten Marken (z. B. Jaguar, Mercedes-Benz, Porsche), nutzen häufig Diesel, haben Karosserien wie Hardtop oder convertible, verfügen über Heckantrieb, Turbolader und moderne Motorsteuerung, während günstigere Fahrzeuge meist Kleinwagen  mit einfacheren Antriebs- und Motorkonfigurationen sind. Insgesamt spiegeln höhere Preise sowohl technische Leistungsfähigkeit als auch Luxus wider. 
+
 Viele kategoriale Variablen weisen zahlreiche Ausprägungen auf. Um die Anzahl der Dummy-Variablen in späteren Modellen zu reduzieren, wurden ähnliche Kategorien(solche mit vergleichbarer Erklärungsstärke für den Preis) per Binning zu Gruppen zusammengefasst.
 
 ![alt text](image-10.png)
