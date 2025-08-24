@@ -72,6 +72,9 @@ Die Boxplots zeigen, dass der Autopreis stark von Merkmalen wie Hersteller, Karo
 Viele kategoriale Variablen weisen zahlreiche Ausprägungen auf. Um die Anzahl der Dummy-Variablen in späteren Modellen zu reduzieren, wurden ähnliche Kategorien(solche mit vergleichbarer Erklärungsstärke für den Preis) per Binning zu Gruppen zusammengefasst.
 
 ![alt text](image-10.png)
+
+Die Boxplots nach dem Binning zeigen, dass die Erklärungsstärke der neuen Kategorien qualitativer Prädiktoren verbessert wurde und die Datenstruktur für nachfolgende Analysen übersichtlicher ist.
+
 ![alt text](image-11.png)
 ![alt text](image-12.png)
 ![alt text](image-6.png)
