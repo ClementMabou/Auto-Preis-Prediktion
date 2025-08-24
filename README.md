@@ -28,7 +28,8 @@ Dieses Studienprojekt untersucht, welche Faktoren den Preis von Automobilen best
 2. **Univariate Datenanalyse**
 
 Sie ist wichtig um einzelne Variable zu verstehen (Wertebereiche, Skalierung, verteilung). Sie bildet eine wichtige Grundlage, um notwendige Transformationen in späteren Analyseschritten vorzunehmen. 
-   - Descriptive Statistik, 
+   - Descriptive Statistik,
+   - Boxplot,  
    - Histogramme, 
    - density plot  
 
