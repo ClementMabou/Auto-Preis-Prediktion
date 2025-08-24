@@ -76,6 +76,7 @@ Viele qualitativen Variablen weisen zahlreiche Ausprägungen auf. Um die Anzahl 
 Die Boxplots nach dem Binning zeigen, dass die Erklärungsstärke der neuen Ausprägungen qualitativer Prädiktoren verbessert wurde und die Datenstruktur für nachfolgende Analysen übersichtlicher ist.
 
 ![alt text](image-11.png)
+
 Dieses Modell basiert auf der Quadratwurzel-Transformation der Zielvariable (Preis) aus einem ersten Modell, um die Voraussetzungen der multiplen linearen Regression zu verbessern. Es umfasst deutlich weniger Merkmale als die ursprüngliche Menge potenzieller Prädiktoren, was die Interpretierbarkeit erhöht, und weist gleichzeitig eine sehr hohe Güte auf: Mit einem R² von 0,9249 (angepasst 0,9202) erklärt es über 92 % der Varianz. Variablen wie Motoraufladung (Turbo), Antriebstyp (rwd), Motorposition (rear), Breite, Zylinderzahl und Motorgröße wirken positiv auf die Autopreise, während eine höhere Kraftstoffeffizienz (Autobahn-mpg) sowie bestimmte Hersteller-Dummies (MS: Marken im mittleren Preissegment, NS: Marken im niedrigen Preissegment) negative Effekte zeigen.
 
 ![alt text](image-12.png)
