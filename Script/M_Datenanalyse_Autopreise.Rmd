@@ -9,40 +9,31 @@ output: html_document
 #  benötigte Pakete importieren und installieren 
 
 ```{r}
+
 # Liste der benötigten Pakete
 
-
-# In diesem Vektor werden alle Paketnamen als Strings gespeichert. Jedes Paket bringt eigene Funktionen mit, die im Projekt genutzt werden.
-
 pakete <- c(
-  "tidyverse",    # Sammlung von Paketen für Datenbearbeitung, -bereinigung und Visualisierung
-  "readxl",       # Zum Einlesen von Excel-Dateien (.xls, .xlsx)
-  "plotly",       # Erstellung interaktiver Diagramme
-  "skimr",        # Übersichtliche Zusammenfassung von Datensätzen
-  "car",          # Werkzeuge für Regressionsanalyse und Hypothesentests
-  "corrplot",     # Grafische Darstellung von Korrelationsmatrizen
-  "vcd",          # Visualisierung kategorialer Daten
-  "dplyr",        # Datenmanipulation (Teil von tidyverse, hier separat geladen)
-  "broom",        # Statistische Modellergebnisse in tabellarischer Form aufbereiten
-  "stringr",      # Arbeiten mit Zeichenketten (Strings)
-  "purrr",        # Funktionale Programmierung und Iterationen
-  "caret",        # Machine-Learning-Framework für Klassifikation und Regression
-  "VIM",           # Visualisierung und Imputation fehlender Werte
-  "patchwork",
-  "MASS",
-  "leaps"
+  "tidyverse",    # Sammlung von Paketen für Datenbearbeitung, -bereinigung und Visualisierung (z. B. ggplot2, dplyr, tidyr, readr, stringr, purrr)
+  "car",          # Werkzeuge für Regressionsanalyse, Hypothesentests und lineare Modelle
+  "corrplot",     # Grafische Darstellung von Korrelationsmatrizen (z. B. Heatmaps von Zusammenhängen)
+  "broom",        # Statistische Modellergebnisse in saubere Tabellenform überführen (tidy output)
+  "stringr",      # Arbeiten mit Zeichenketten (Strings), z. B. Textsuche, Ersetzen, Formatierung
+  "purrr",        # Funktionale Programmierung (Iteration mit map-Funktionen statt Schleifen)
+  "caret",        # Machine-Learning-Framework für Klassifikation und Regression (inkl. Cross-Validation)
+  "patchwork",    # Kombinieren mehrerer ggplot2-Grafiken zu einem Layout
+  "MASS",         # Statistische Methoden und Datensätze (z. B. Schrittweise Regression, Verteilungen)
+  "leaps"         # Variablenselektion in Regressionsmodellen (subset selection)
 )
 
 # Funktion zum Installieren und Laden fehlender Pakete
-# Diese Funktion prüft, ob das Paket bereits installiert ist.
-# Falls nicht, wird es installiert.
 
 installiere_und_lade_wenn_nicht_vorhanden <- function(pkg) {
-  if (!requireNamespace(pkg, quietly = TRUE)) {  # Prüfen, ob Paket vorhanden ist
-    install.packages(pkg)                       # Falls nicht: installieren
+  if (!requireNamespace(pkg, quietly = TRUE)) {   # Prüfen, ob Paket vorhanden ist
+    install.packages(pkg)                        # Falls nicht installiert: automatisch von CRAN holen
   }
-  library(pkg, character.only = TRUE)           # Laden (Name als Zeichenkette übergeben)
+  library(pkg, character.only = TRUE)            # Laden (Paketname als Zeichenkette übergeben)
 }
+
 
 # Alle Pakete installieren und laden
 
@@ -54,11 +45,10 @@ lapply(pakete, installiere_und_lade_wenn_nicht_vorhanden)
 
 ```{r}
 # Daten importieren
-cars_df <- read_csv("C:\\Users\\cleme\\Desktop\\Multivariate_Datenanalyse\\Daten\\cars.csv")
+cars_df <- read_csv("C:\\Users\\cleme\\Desktop\\Projekte\\Auto-Preis-Prediktion\\Daten\\cars.csv")
 # Datenexploration
-  ## Daten ansehen
 # View(cars_df)
-head(cars_df)
+head(cars_df, n=10)
 cars_df$...1  <- NULL
  
 ```
@@ -75,26 +65,27 @@ cars_df[duplicated(cars_df),]
 ## B.2 unlogische Werte
 ### B.2.1 unlogische Werte?
 ```{r}
-# Übersicht aller Spalten (numerisch: Kennzahlen, nicht-numerisch: Datentyp)
-summary(cars_df)
+# Übersicht aller Spalten 
+summary(cars_df)   # Statistische Übersicht (Min, Max, Mittelwert, NA-Zahlen etc.) pro Spalte
 
-# Kategoriale Spalten identifizieren (alles außer numerisch)
-kategorielle_spalten <- !sapply(cars_df, is.numeric)
+# Kategoriale Spalten identifizieren 
+kategorielle_spalten <- !sapply(cars_df, is.numeric)   # TRUE für nicht-numerische Spalten (z. B. Strings, Faktoren)
 
 # Häufigkeitstabellen für kategoriale Spalten erstellen
-sapply(cars_df[kategorielle_spalten], table)
+sapply(cars_df[kategorielle_spalten], table)   # Gibt für jede kategoriale Spalte die Häufigkeit der Werte zurück
+
 
 ```
 
 ###  B.2.2 unlogische Werte ersetzen 
 ```{r}
-cars_df[cars_df=="?"]<-"NA"
-cars_df[cars_df=="std"]<-"standard"
+cars_df[cars_df == "?"] <- "NA"          # Alle Zellen mit "?" durch "NA" ersetzen (für fehlende Werte)
+cars_df[cars_df == "std"] <- "standard"  # Kürzel "std" durch "standard" ersetzen (vereinheitlichen)
+
 ```
 
 ## B.3 Nicht geeignete Datentypen
 ### B.3.1 Nicht geeignete Datentypen ? 
-ja: Es gibt Spalten, die den Datentyp character haben statt numerisch:tueren,anzahl_zylinder,kolben_durchmesser,stroke,PS,drehzahl_max und preis  
 
 ```{r}
 
@@ -139,30 +130,29 @@ str(cars_df)                                                           # Zeigt d
 ### B.4.1 Fehlende Werte?
 ```{r}
 
-
-
 # Eine Tabelle der fehlenden Werte erstellen
-fehlende_Werte <- as.data.frame(colSums(is.na(cars_df)))
-colnames(fehlende_Werte) <- "Anzahl_Fehlende_Werte"
+fehlende_Werte <- as.data.frame(colSums(is.na(cars_df)))   # Anzahl fehlender Werte pro Spalte zählen und als DataFrame speichern
+colnames(fehlende_Werte) <- "Anzahl_Fehlende_Werte"        # Spaltennamen setzen
 
 # Relative Häufigkeit berechnen
-fehlende_Werte$Haeufigkeit_Prozent <- round((fehlende_Werte$Anzahl_Fehlende_Werte / nrow(cars_df)) * 100, 2)
+fehlende_Werte$Haeufigkeit_Prozent <- round((fehlende_Werte$Anzahl_Fehlende_Werte / nrow(cars_df)) * 100, 2)   # Anteil fehlender Werte in %
 
 # Sortieren der Tabelle nach Anzahl der fehlenden Werte (absteigend)
-fehlende_Werte <- fehlende_Werte %>% arrange(desc(Anzahl_Fehlende_Werte))
+fehlende_Werte <- fehlende_Werte %>% arrange(desc(Anzahl_Fehlende_Werte))   # Sortieren: Spalten mit den meisten NAs zuerst
 
 # Die sortierte Tabelle anzeigen
-head(fehlende_Werte, n = 8)
+head(fehlende_Werte, n = 8)   # Ausgabe der Top-8 Spalten mit den meisten fehlenden Werten
 
 ```
 
 
 ### B.4.2 Fehlende Werte entfernen
 ```{r}
-colSums(is.na(cars_df))                            # Zählt, wie viele NA-Werte es in jeder Spalte von 'cars_df' gibt
-cars_df <- cars_df[rowSums(is.na(cars_df)) == 0, ] # Entfernt alle Zeilen, die mindestens einen NA-Wert enthalten
-cat("\n\n")                                        # zwei Leerzeilen einfügen, um die Ausgaben zu trennen
-colSums(is.na(cars_df))                            # Prüft erneut die Anzahl der NA-Werte pro Spalte nach dem Entfernen
+colSums(is.na(cars_df))                             # Zählt, wie viele NA-Werte in jeder Spalte vorkommen
+cars_df <- cars_df[rowSums(is.na(cars_df)) == 0, ]  # Behalte nur Zeilen ohne fehlende Werte (löscht alle mit >=1 NA)
+cat("\n\n")                                         # Fügt zwei Leerzeilen in der Konsolenausgabe ein (bessere Lesbarkeit)
+colSums(is.na(cars_df))                             # Prüft erneut, ob nach dem Entfernen noch NA-Werte vorhanden sind
+
 ```
 
 
@@ -170,18 +160,17 @@ colSums(is.na(cars_df))                            # Prüft erneut die Anzahl de
 ### B.5.1   Außreiser ?
 
 ```{r}
-# ---- Funktion zur Ermittlung der Ausreißer-Indizes nach der IQR-Methode ----
+#  Funktion zur Ermittlung der Ausreißer-Indizes nach der IQR-Methode 
 find_outliers_iqr <- function(x) {
-  x_clean <- x[!is.na(x)]                      # fehlende Werte (NA) entfernen, damit Quantile korrekt berechnet werden
-  Q1 <- quantile(x_clean, 0.25, na.rm = TRUE)  # 1. Quartil (25%-Perzentil) berechnen
-  Q3 <- quantile(x_clean, 0.75, na.rm = TRUE)  # 3. Quartil (75%-Perzentil) berechnen
+  Q1 <- quantile(x, 0.25,na.rm =TRUE)          # 1. Quartil (25%-Perzentil) berechnen
+  Q3 <- quantile(x, 0.75, na.rm= TRUE)         # 3. Quartil (75%-Perzentil) berechnen
   IQR <- Q3 - Q1                               # Interquartilsabstand (Q3 minus Q1)
   lower <- Q1 - 1.5 * IQR                      # untere Grenze für Ausreißer bestimmen
   upper <- Q3 + 1.5 * IQR                      # obere Grenze für Ausreißer bestimmen
   which(x < lower | x > upper)                 # Indizes der Werte zurückgeben, die außerhalb der Grenzen liegen
 }
 
-# ---- Hilfsfunktion: numerische Spalten extrahieren und Ausreißer pro Spalte zählen ----
+#  Hilfsfunktion: numerische Spalten extrahieren und Ausreißer pro Spalte zählen 
 get_outlier_counts <- function(df) {
   numeric_cols <- sapply(df, is.numeric)               # logischer Vektor: welche Spalten sind numerisch?
   numeric_df <- df[, numeric_cols]                     # nur die numerischen Spalten auswählen
@@ -189,48 +178,40 @@ get_outlier_counts <- function(df) {
   sapply(outlier_indices, length)                      # Anzahl der Ausreißer pro Spalte zurückgeben
 }
 
-# ---- Ausreißer  zählen ----
-outlier_counts_before <- get_outlier_counts(cars_df)  # Hilfsfunktion auf den ursprünglichen Dataframe anwenden
-print(outlier_counts_before)                          # Anzahl der Ausreißer pro Spalte vor der Ersetzung ausgeben
-cat("\n\n")                                           # zwei Leerzeilen einfügen, um die Ausgaben zu trennen
-
-
+# Ausreißer  zählen 
+outlier_counts <- get_outlier_counts(cars_df)  # Hilfsfunktion auf den ursprünglichen Dataframe anwenden
+print(outlier_counts)                          # Anzahl der Ausreißer pro Spalte vor der Ersetzung ausgeben
+cat("\n\n")                                    # zwei Leerzeilen einfügen, um die Ausgaben zu trennen
 ```
 ### B.5.2 Außreiser entfernen
 
 
 ```{r}
-# ---- Ausreißer durch untere/obere Grenze ersetzen ----
-numeric_cols <- sapply(cars_df, is.numeric)           # prüfen, welche Spalten numerisch sind
+#  Ausreißer durch untere/obere Grenze ersetzen
+numeric_cols <- sapply(cars_df, is.numeric)                # Prüfen, welche Spalten numerisch sind
 
-for (colname in names(cars_df)[numeric_cols]) {       # jede numerische Spalte durchgehen
-  vec <- cars_df[[colname]]                           # Spaltenvektor extrahieren
-  x_clean <- vec[!is.na(vec)]                         # NAs für die Berechnung entfernen
+for (colname in names(cars_df)[numeric_cols]) {            # Jede numerische Spalte durchgehen
+  vec <- cars_df[[colname]]                                # Spaltenvektor extrahieren
   
-  if (colname == "anzahl_zylinder") {
-    # Für anzahl_zylinder: unteres 10%-Perzentil, oberes 90%-Perzentil
-    lower <- quantile(x_clean, 0.10, na.rm = TRUE)
-    upper <- quantile(x_clean, 0.90, na.rm = TRUE)
-  } else {
-    # Für alle anderen numerischen Spalten: klassische IQR-Methode
-    Q1 <- quantile(x_clean, 0.25, na.rm = TRUE)
-    Q3 <- quantile(x_clean, 0.75, na.rm = TRUE)
-    IQR <- Q3 - Q1
-    lower <- Q1 - 1.5 * IQR
-    upper <- Q3 + 1.5 * IQR
+  if (colname == "anzahl_zylinder") {                      # Sonderfall: Variable "anzahl_zylinder"
+    lower <- quantile(vec, 0.10, na.rm = TRUE)             # Unteres 10%-Perzentil als Grenze
+    upper <- quantile(vec, 0.90, na.rm = TRUE)             # Oberes 90%-Perzentil als Grenze
+  } else {                                                 # Standardfall: alle anderen numerischen Spalten
+    Q1 <- quantile(vec, 0.25, na.rm = TRUE)                # 1. Quartil (25%)
+    Q3 <- quantile(vec, 0.75, na.rm = TRUE)                # 3. Quartil (75%)
+    IQR <- Q3 - Q1                                         # Interquartilsabstand
+    lower <- Q1 - 1.5 * IQR                                # Untere Grenze (IQR-Regel)
+    upper <- Q3 + 1.5 * IQR                                # Obere Grenze (IQR-Regel)
   }
-
-  # Werte außerhalb der Grenzen ersetzen
-  vec[vec < lower] <- lower
-  vec[vec > upper] <- upper
-  cars_df[[colname]] <- vec                              # bereinigten Vektor zurückschreiben
+  
+  vec[vec < lower] <- lower                                # Werte kleiner als die untere Grenze → auf Grenze setzen
+  vec[vec > upper] <- upper                                # Werte größer als die obere Grenze → auf Grenze setzen
+  cars_df[[colname]] <- vec                                # Bereinigten Vektor zurückschreiben
 }
-
-# ---- Ausreißer zur Prüfung nach dem Ersetzen zählen ----
-outlier_counts_after <- get_outlier_counts(cars_df)     # erneut zählen
-print(outlier_counts_after)                              # Anzahl der Ausreißer pro Spalte ausgeben
-cat("\n\n")                                              # zwei Leerzeilen
-
+# Ausreißer zur Prüfung nach dem Ersetzen zählen 
+outlier_counts <- get_outlier_counts(cars_df)              # Benutzerdefinierte Funktion: zählt verbleibende Ausreißer
+print(outlier_counts)                                      # Ausgabe: Anzahl Ausreißer pro Spalte
+cat("\n\n")                                                # Zwei Leerzeilen für bessere Lesbarkeit
 
 ```
 
@@ -260,7 +241,7 @@ for (col_name in names(numeric_df)) {             # Schleife über alle Spaltenn
   # 1. Summary-Statistik + Standardabweichung
   plot.new()                                      # Öffnet einen neuen, leeren Plot (für Textausgabe)
   summary_stats <- summary(data_vector)           # Berechnet Min, 1.Quartil, Median, Mittelwert, 3.Quartil, Max
-  std_dev <- sd(data_vector)                      # Berechnet die Standardabweichung (NAs sind schon entfernt)
+  std_dev <- sd(data_vector)                      # Berechnet die Standardabweichung 
   IQR<- quantile(data_vector,0.75)-quantile(data_vector,0.25) # Berechnet den Interquartilsabstand 
   
   # Titel
@@ -281,7 +262,7 @@ for (col_name in names(numeric_df)) {             # Schleife über alle Spaltenn
   # Standardabweichung anzeigen
   text(x = 0, y = y_pos, labels = paste0("SD: ", round(std_dev, 2)), adj = 0, cex = 1.3)  # SD unten anhängen (größere Schrift)
   
-  y_pos <- y_pos - line_spacing                            # Abstand zwischen den Textzeilen 
+  y_pos <- y_pos - line_spacing                    # Abstand zwischen den Textzeilen 
   
   # Interquartilsabstände anzeigen
   text(x = 0, y = y_pos, labels = paste0("IQR: ", round(IQR, 2)), adj = 0, cex = 1.3)  # IQR unten anhängen (größere Schrift)
@@ -310,11 +291,6 @@ for (col_name in names(numeric_df)) {             # Schleife über alle Spaltenn
 
 
 ```
-
-
-
-
-
 
 
 ### C.1.2 qualitative Merkmale
@@ -413,19 +389,20 @@ ggplot(long_df, aes(x = Value, y = preis)) +                   # Datenquelle: lo
 
 
 ### C.2.2 Korelationsmatrix
-Merkmale, die gut mit der Zielvariable Preis korreliert sind, sind:  Radstand, Laenge, Breite, Gewicht, Anzahl_zylender,motor_groesse,kolben_durchmesser,
-PS,verbrauch_stadt_mpg und verbrauch_autobahn_mpg.
+
 
 ```{r}
 # 1. Nur numerische Spalten extrahieren
-num_cols <- sapply(cars_df, is.numeric)
-numeric_df <- cars_df[, num_cols]
+cars_df <- cars_df %>% na.omit()              # Entfernt alle Zeilen mit mindestens einem NA-Wert,falls vorhanden
+num_cols <- sapply(cars_df, is.numeric)       # Prüft jede Spalte: TRUE, wenn numerisch, sonst FALSE
+numeric_df <- cars_df[, num_cols]             # Selektiert nur die numerischen Spalten aus cars_df
 
 # 2. Korrelationsmatrix berechnen
-cor_matrix <- cor(numeric_df)
+cor_matrix <- cor(numeric_df)                 # Berechnet die Pearson-Korrelationen zwischen allen numerischen Spalten
 
 # 3. Mixed Corrplot erzeugen
-corrplot.mixed(cor_matrix)
+corrplot.mixed(cor_matrix)                    # Visualisiert die Korrelationsmatrix:
+                                              # obere Hälfte als Kreise (grafisch), untere Hälfte als Zahlen (genauer Wert)
 
 
 ```
@@ -435,49 +412,47 @@ corrplot.mixed(cor_matrix)
 #### C.2.3.1 preis vs qualitativen Variablen vor Binning
 ```{r}
 # 1. Nicht-numerische Spalten extrahieren (ohne Preis)
-non_numeric_cols <- !sapply(cars_df, is.numeric)
-cat_df <- cars_df[, non_numeric_cols]
+non_numeric_cols <- !sapply(cars_df, is.numeric)   # TRUE für nicht-numerische Spalten
+cat_df <- cars_df[, non_numeric_cols]              # Selektiert nur diese Spalten
 
 # 2. Preis-Spalte
-preis_vector <- cars_df$preis
+preis_vector <- cars_df$preis                      # Vektor mit den Preisen
 
 # Anzahl der kategorialen Variablen
-n_cols <- ncol(cat_df)
+n_cols <- ncol(cat_df)                             # Anzahl Spalten in cat_df
 
 # Layout vorbereiten (z. B. 2 Zeilen, 3 Spalten)
-par(mfrow = c(ceiling(n_cols/3), 3), mar=c(5,4,4,2))  # 3 pro Reihe
+par(mfrow = c(ceiling(n_cols/3), 3), mar=c(5,4,4,2))  # Anzahl Zeilen automatisch, 3 Boxplots pro Reihe, Ränder setzen
 
 # 3. Schleife für jede kategoriale Variable
 for (col_name in names(cat_df)) {
-  kategorie <- as.factor(cat_df[[col_name]])
+  kategorie <- as.factor(cat_df[[col_name]])       # Spalte in Faktor umwandeln
   
-  if (length(unique(na.omit(kategorie))) > 1) {
+  if (length(unique(na.omit(kategorie))) > 1) {   # Nur Variablen mit >1 Kategorie bearbeiten
     # Median pro Kategorie berechnen
     median_preis <- tapply(preis_vector, kategorie, median, na.rm = TRUE)
     
-    # Kategorien nach Median sortieren
-    sorted_levels <- names(sort(median_preis, decreasing = TRUE))
-    kategorie <- factor(kategorie, levels = sorted_levels)
-    median_preis <- median_preis[sorted_levels]
-    
+    # Kategorien nach Median sortieren (höchster Median zuerst)
+     sorted_levels <- names(sort(median_preis, decreasing = TRUE))   # Namen der Kategorien nach Median-Wert sortieren, absteigend
+     kategorie <- factor(kategorie, levels = sorted_levels)          # Faktorlevels entsprechend der sortierten Reihenfolge anpassen
+     median_preis <- median_preis[sorted_levels]                     # Median-Werte in der gleichen Reihenfolge anordnen
+
     # Boxplot erstellen
     boxplot(preis_vector ~ kategorie,
-            main = paste("Preis vs", col_name),
-            xlab = "",
-            ylab = "Preis",
-            col = "lightblue",
-            las = 2,
-            cex.axis = 0.7)
+            main = paste("Preis vs", col_name),   # Titel
+            xlab = "",                             # x-Achse leer
+            ylab = "Preis",                        # y-Achsenbeschriftung
+            col = "lightblue",                      # Füllfarbe Boxplot
+            las = 2,                                # x-Achsenbeschriftung senkrecht
+            cex.axis = 0.7)                         # Schriftgröße Achsenbeschriftung
     
     # Medianpunkte hinzufügen
-    points(1:length(median_preis), median_preis, col = "red", pch = 19)
+    points(1:length(median_preis), median_preis, col = "red", pch = 19)  # Rote Punkte für Mediane
     
     # Linie durch Medianpunkte
-    lines(1:length(median_preis), median_preis, col = "red", lwd = 2)
+    lines(1:length(median_preis), median_preis, col = "red", lwd = 2)    # Linie verbindet die Mediane
   }
 }
-
-
 
 ```
 
@@ -488,36 +463,44 @@ for (col_name in names(cat_df)) {
 ```{r}
 cars_df <- cars_df %>%
   dplyr::mutate(
+    # Hersteller in Gruppen zusammenfassen
     hersteller = case_when(
-      hersteller %in% c("jaguar", "mercedes-benz", "porsche", "bmw") ~ "LS",
-      hersteller %in% c("volvo", "audi", "peugot", "mercury", "alfa-romero", "saab", "volkswagen") ~ "MS",
+      hersteller %in% c("jaguar", "mercedes-benz", "porsche", "bmw") ~ "LS",        # Luxussegment
+      hersteller %in% c("volvo", "audi", "peugot", "mercury", "alfa-romero", "saab", "volkswagen") ~ "MS",  # Mittlere Segment
       hersteller %in% c("toyota", "isuzu", "mazda", "mitsubishi", "nissan", "subaru", 
-                        "plymouth", "honda", "dodge", "chevrolet") ~ "NS",
-      TRUE ~ NA_character_
+                        "plymouth", "honda", "dodge", "chevrolet") ~ "NS",           # Niedriges Segment
+      TRUE ~ NA_character_                                                           # Alle anderen/fehlenden Werte als NA
     ),
+    
+    # Kraftstoffsystem gruppieren
     kraftstoff_system = case_when(
-      kraftstoff_system %in% c("mpfi", "idi") ~ "mpfi_idi",
-      kraftstoff_system %in% c("mfi", "spfi", "spdi") ~ "mfi_spfi_spdi",
-      kraftstoff_system %in% c("2bbl", "1bbl") ~ "2bbl_1bbl",
-      TRUE ~ NA_character_
+      kraftstoff_system %in% c("mpfi", "idi") ~ "mpfi_idi",                          # Gruppe 1
+      kraftstoff_system %in% c("mfi", "spfi", "spdi") ~ "mfi_spfi_spdi",             # Gruppe 2
+      kraftstoff_system %in% c("2bbl", "1bbl") ~ "2bbl_1bbl",                        # Gruppe 3
+      TRUE ~ NA_character_                                                           # Alle anderen/fehlenden Werte als NA
     ),
+    
+    # Karosserieform gruppieren
     karosserie_form = case_when(
-      karosserie_form %in% c("hardtop","convertible") ~ "hardtop_convertible",
-      karosserie_form %in% c("wagon","sedan") ~ "wagon_sedan",
-      karosserie_form %in% c("hatchback") ~ "hatchback",
-      TRUE ~ NA_character_
+      karosserie_form %in% c("hardtop","convertible") ~ "hardtop_convertible",      # Sportliche Karosserien
+      karosserie_form %in% c("wagon","sedan") ~ "wagon_sedan",                      # Familienautos
+      karosserie_form %in% c("hatchback") ~ "hatchback",                            # Einzelgruppe Hatchback
+      TRUE ~ NA_character_                                                          # Alle anderen/fehlenden Werte als NA
     ),
+    
+    # Motorsteuerung gruppieren
     motorsteuerung = case_when(
-      motorsteuerung %in% c("ohcv") ~ "ohcv",
-      motorsteuerung %in% c("dohc","l") ~ "dohc_l",
-      motorsteuerung %in% c("ohcf","ohc") ~ "ohcf_ohc",
-      TRUE ~ NA_character_
+      motorsteuerung %in% c("ohcv") ~ "ohcv",                                       # Einzelgruppe
+      motorsteuerung %in% c("dohc","l") ~ "dohc_l",                                 # Gruppe 1
+      motorsteuerung %in% c("ohcf","ohc") ~ "ohcf_ohc",                             # Gruppe 2
+      TRUE ~ NA_character_                                                          # Alle anderen/fehlenden Werte als NA
     ),
-    # NEU: Antrieb separat behandeln
+    
+    # Antriebsart separat gruppieren
     antrieb_typ = case_when(
-      antrieb_typ %in% c("rwd") ~ "nwd",
-      antrieb_typ %in% c("fwd", "4wd") ~ "4wd_fwd",
-      TRUE ~ NA_character_
+      antrieb_typ %in% c("rwd") ~ "nwd",                                            # Hinterradantrieb
+      antrieb_typ %in% c("fwd", "4wd") ~ "4wd_fwd",                                 # Front- oder Allradantrieb
+      TRUE ~ NA_character_                                                          # Alle anderen/fehlenden Werte als NA
     )
   )
 
@@ -529,49 +512,50 @@ cars_df <- cars_df %>%
 
 ```{r}
 # 1. Nicht-numerische Spalten extrahieren (ohne Preis)
-non_numeric_cols <- !sapply(cars_df, is.numeric)
-cat_df <- cars_df[, non_numeric_cols]
+non_numeric_cols <- !sapply(cars_df, is.numeric)   # TRUE für nicht-numerische Spalten
+cat_df <- cars_df[, non_numeric_cols]              # Nur diese Spalten auswählen
 
 # 2. Preis-Spalte
-preis_vector <- cars_df$preis
+preis_vector <- cars_df$preis                      # Vektor mit den Preisen
 
 # 3. Anzahl Plots und Layout berechnen
-num_plots <- ncol(cat_df)
-rows <- ceiling(sqrt(num_plots))
-cols <- ceiling(num_plots / rows)
-par(mfrow = c(rows, cols), mar = c(5,5,4,2))
+num_plots <- ncol(cat_df)                          # Anzahl der kategorialen Variablen
+rows <- ceiling(sqrt(num_plots))                   # Anzahl Zeilen: quadratische Anordnung für Übersicht
+cols <- ceiling(num_plots / rows)                  # Anzahl Spalten automatisch berechnen
+par(mfrow = c(rows, cols), mar = c(5,5,4,2))       # Plot-Layout setzen: mfrow und Ränder
 
 # 4. Schleife für jede kategoriale Variable
 for (col_name in names(cat_df)) {
-  kategorie <- as.factor(cat_df[[col_name]])
+  kategorie <- as.factor(cat_df[[col_name]])      # Spalte in Faktor umwandeln
   
-  if (length(unique(na.omit(kategorie))) > 1) {
+  if (length(unique(na.omit(kategorie))) > 1) {   # Nur Variablen mit mehr als 1 Kategorie bearbeiten
     # Median pro Kategorie berechnen
     median_preis <- tapply(preis_vector, kategorie, median, na.rm = TRUE)
     
-    # Kategorien nach Median sortieren
+    # Kategorien nach Median sortieren (höchster Median zuerst)
     sorted_levels <- names(sort(median_preis, decreasing = TRUE))
     kategorie <- factor(kategorie, levels = sorted_levels)
     median_preis <- median_preis[sorted_levels]
     
     # Boxplot erstellen
     boxplot(preis_vector ~ kategorie,
-            main = paste("Boxplot von Preis vs", col_name),
-            xlab = col_name,
-            ylab = "Preis",
-            col = "lightblue",
-            las = 2)
+            main = paste("Boxplot von Preis vs", col_name),  # Titel dynamisch
+            xlab = col_name,                                 # x-Achsenbeschriftung
+            ylab = "Preis",                                  # y-Achsenbeschriftung
+            col = "lightblue",                               # Füllfarbe
+            las = 2)                                         # x-Achse senkrecht
     
     # Medianpunkte hinzufügen
-    points(1:length(median_preis), median_preis, col = "red", pch = 19)
+    points(1:length(median_preis), median_preis, col = "red", pch = 19)  # rote Punkte für Mediane
     
     # Linie durch Medianpunkte
-    lines(1:length(median_preis), median_preis, col = "red", lwd = 2)
+    lines(1:length(median_preis), median_preis, col = "red", lwd = 2)    # rote Linie durch Mediane
   }
 }
 
 # Layout zurücksetzen
-par(mfrow = c(1,1))
+par(mfrow = c(1,1))  # Standard-Plotlayout wiederherstellen
+
 
 ```
 
@@ -579,38 +563,28 @@ par(mfrow = c(1,1))
 
 
 ## C.3 Multiple lineare Regression
-### C.3.1 Merkmalsauswahl + Datenaufteilung in Traindaten und Testdaten
+### C.3.1 erste Merkmalsauswahl + Datenaufteilung in Traindaten und Testdaten
 ```{r}
-set.seed(120)                                                 # Setze Zufallssamen für Reproduzierbarkeit
+set.seed(120)                                                 # Zufallssamen setzen, damit Ergebnisse reproduzierbar sind
 
+#  Numerische Spalten auswählen 
+numeric_vars <- c("breite", "anzahl_zylinder",            # Numerische Prädiktoren, die ausreichend stark mit der Zielvariable "preis" korrelieren (r > 0.2)
+                  "motor_groesse", "kolben_durchmesser",  # und untereinander keine hohe Multikollinearität aufweisen (r < 0.8)
+                  "verbrauch_autobahn_mpg", "preis")        
 
-# ---- Numerische Spalten auswählen ----
+# Kategorische Spalten auswählen (Beispiel) 
+categorical_vars <- names(cars_df)[!sapply(cars_df, is.numeric)]  # Alle Spalten, die nicht numerisch sind
 
+# Dataframe mit ausgewählten Spalten erstellen
+cars_df_select <- cars_df[, c(categorical_vars, numeric_vars)]    # Nur die ausgewählten Spalten behalten
 
-numeric_vars <- c(  "breite", "anzahl_zylinder",
-                  "motor_groesse", "kolben_durchmesser",
-               "verbrauch_autobahn_mpg","preis")
+#  Train/Test-Split
+train_ratio <- 0.8                                             # Anteil der Daten für Training (80%)
+n <- nrow(cars_df_select)                                      # Gesamtanzahl der Zeilen
+train_indices <- sample(1:n, size = floor(train_ratio * n))    # Zufällige Auswahl von Trainings-Indizes
+train_df <- cars_df_select[train_indices, ]                    # Trainingsdaten zusammenstellen
+test_df  <- cars_df_select[-train_indices, ]                   # Testdaten aus den verbleibenden Zeilen
 
-#numeric_vars <- c("radstand", "laenge","verbrauch_autobahn_mpg",
-#                  "motor_groesse", "kolben_durchmesser","preis"
-#                ),"verbrauch_stadt_mpg","gewicht","radstand","PS","laenge"
-
-# ---- Kategorische Spalten auswählen (Beispiel) ----
-categorical_vars <- names(cars_df)[!sapply(cars_df, is.numeric)]  # alle nicht-numerischen Spalten
-# Schritt 2: Definieren Sie die Variablen, die Sie ausschließen möchten
-
-
-# ---- Dataframe mit ausgewählten Spalten erstellen ----
-cars_df_select <- cars_df[, c(categorical_vars, numeric_vars)]
-
-
-# 3. Train/Test-Split
-train_ratio <- 0.8                                            # Anteil Trainingsdaten (80%)
-n <- nrow(cars_df_select)                                        # Gesamtanzahl der Zeilen
-train_indices <- sample(1:n, size = floor(train_ratio * n))   # Zufällige Auswahl der Trainingsindizes
-train_df <- cars_df_select[train_indices, ]                      # Trainingsdaten
-test_df  <- cars_df_select[-train_indices, ]                     # Testdaten
-                   # Testdaten
 ```
 
 
@@ -619,44 +593,45 @@ test_df  <- cars_df_select[-train_indices, ]                     # Testdaten
 ### C.3.2 Forward- und Backward-Selection + modelbildung
 
 ```{r}
-
-
 # 1. Start-Modell (Start mit allen Variablen)
-# Verwenden Sie das vollständige Modell aus Ihrem Backward-Code als Startpunkt
-full_model <- lm(preis ~ ., data = train_df)
+full_model <- lm(preis ~ ., data = train_df)   # Lineares Modell mit allen Prädiktoren in train_df
 
 # 2. Leeres Modell (Start ohne Variablen)
-# Dies ist der Startpunkt für die Forward-Selection, um alle verfügbaren Variablen zu berücksichtigen
-empty_model <- lm(preis ~ 1, data = train_df)
+empty_model <- lm(preis ~ 1, data = train_df)  # Modell nur mit Intercept (kein Prädiktor)
+                                               # Startpunkt für Forward-Selection
 
-# 3. Führen Sie die Stepwise-Regression durch (kombinierte Auswahl)
-# direction = "both" kombiniert Forward- und Backward-Selection
-# scope definiert den kleinsten und größten möglichen Modellumfang
-model <- stepAIC(full_model,
-                                    scope = list(lower = empty_model, upper = full_model),
-                                    direction = "both",
-                                    trace = 1) # trace = 1 zeigt die einzelnen Schritte
-summary(model)
+# 3. Stepwise-Regression durchführen (kombinierte Auswahl)
+model <- stepAIC(
+  full_model,                                 # Startmodell für die Selektion
+  scope = list(lower = empty_model, upper = full_model),  # Definiert Minimal- und Maximalmodell
+  direction = "both",                          # Sowohl Forward- als auch Backward-Selection
+  trace = 1                                    # Ausgabe der Zwischenschritte 
+)
+
+summary(model)                                 # Zusammenfassung des final ausgewählten Modells
 
 ```
 
 
 
-### C.3.3 Modelprämise Prüfen
- Homoskedastizität: Die Störgrößen haben eine konstante Varianz
- Die Störgrößen sind normalverteilt .
-
+### C.3.3 Überprüfung der Modellannahmen
+ 
 ```{r}
 # Alle Diagnoseplots auf einmal anzeigen
-par(mfrow = c(2, 2))  # 2x2 Layout für die Plots
-plot(model)
+par(mfrow = c(2, 2))   # 2x2 Layout, sodass alle vier Standard-Diagnoseplots gleichzeitig angezeigt werden
+
+plot(model)            # Erstellt die Standard-Diagnoseplots für ein lineares Modell:
+                        # 1. Residuen vs. Fit (Prüfung auf Nichtlinearität)
+                        # 2. Q-Q-Plot (Normalität der Residuen)
+                        # 3. Scale-Location (Homoskedastizität der Residuen)
+                        # 4. Residuals vs. Hebelwerte (Einflussreiche Punkte)
+
 
 ```
-
-
-
+### C.3.4 Box-Cox Transformation
 ```{r}
-boxCox(model)
+boxCox(model)       # Box-Cox Transformation: prüft, ob eine Potenztransformation der Zielvariable (Preis) die Modellannahmen verbessert
+
 ```
 
 
@@ -683,35 +658,40 @@ summary(Tmodel)
 
 
 
-### C.3.5 prämise der verbesserte Models Prüfen
+### C.3.5 Überprüfung der Modellannahmen des verbesserten Modells
 
 
 ```{r}
-# Alle Diagnoseplots auf einmal anzeigen
-par(mfrow = c(2, 2))  # 2x2 Layout für die Plots
-plot(Tmodel)
+# Alle Diagnoseplots für das transformierte Modell auf einmal anzeigen
+par(mfrow = c(2, 2))   # 2x2 Layout, sodass alle vier Standard-Diagnoseplots gleichzeitig dargestellt werden
+
+plot(Tmodel)            # Erstellt die Standard-Diagnoseplots für das lineare Modell Tmodel:
+                        # 1. Residuen vs. Fit: prüft Nichtlinearität
+                        # 2. Q-Q-Plot: prüft Normalität der Residuen
+                        # 3. Scale-Location: prüft Homoskedastizität (Varianz der Residuen)
+                        # 4. Residuals vs. Hebelwerte: identifiziert einflussreiche Beobachtungen
+
 
 ```
-
-
-
 
 
 ### C.3.6 Modellleistung
 
 ```{r}
-
-
 # 1. Datensätze in einer Liste speichern
 data_list <- list(
-  Training_Set = train_df,
-  Test_Set     = test_df
+  Training_Set = train_df,  # Trainingsdaten
+  Test_Set     = test_df    # Testdaten
 )
 
-# 2. Funktion, die alle Schritte für einen Datensatz ausführt
-# (Anpassung der Faktorstufen, Vorhersage, Performance-Bewertung)
+# 2. Funktion, die alle Schritte für einen Datensatz ausführt:
+#    - Faktorstufen anpassen
+#    - Vorhersagen erstellen
+#    - Performance bewerten
+#    - Scatterplot von vorhergesagten vs. tatsächlichen Preisen erzeugen
 evaluate_and_plot <- function(df, model, name) {
-  # Faktorstufen anpassen
+  
+  # Faktorstufen anpassen: sicherstellen, dass die Levels im Datensatz mit denen im Modell übereinstimmen
   model_levels <- model$xlevels
   for (factor_name in names(model_levels)) {
     if (factor_name %in% names(df)) {
@@ -719,38 +699,41 @@ evaluate_and_plot <- function(df, model, name) {
     }
   }
   
-  # Vorhersagen und Performance berechnen
+  # Vorhersagen erstellen
   df$predicted <- predict(model, newdata = df)
+  
+  # Performance-Metriken berechnen (RMSE, R², MAE)
   performance <- postResample(pred = df$predicted, obs = df$preis)
   
-  # Plot erstellen
+  # Scatterplot von tatsächlichem vs. vorhergesagtem Preis erstellen
   p <- ggplot(df, aes(x = preis, y = predicted)) +
-    geom_point(color = "darkblue", alpha = 0.6, size = 2) +
-    geom_smooth(method = "lm", se = FALSE, color = "red", linetype = "dashed") +
-    geom_abline(intercept = 0, slope = 1, color = "darkgreen", linetype = "solid", linewidth = 1) +
+    geom_point(color = "darkblue", alpha = 0.6, size = 2) +      # Punkte
+    geom_smooth(method = "lm", se = FALSE, color = "red", linetype = "dashed") +  # lineare Fit-Linie
+    geom_abline(intercept = 0, slope = 1, color = "darkgreen", linetype = "solid", linewidth = 1) +  # perfekte Vorhersage-Linie
     labs(
       x = "Tatsächlicher Preis",
       y = "Vorhergesagter Preis",
       title = paste0("Vorhergesagter vs. tatsächlicher Preis\n(", name, " Datensatz)")
     ) +
-    theme_minimal()
-  
-  return(list(performance = performance, plot = p))
+    theme_minimal()  # sauberes Design
+    
+  return(list(performance = performance, plot = p))  # Ergebnis als Liste zurückgeben
 }
 
-# 3. Den Prozess über die Liste der Datensätze mappen (iterieren)
+# 3. Den Prozess über die Liste der Datensätze iterieren
 results <- map(names(data_list), ~evaluate_and_plot(data_list[[.x]], Tmodel, .x))
 names(results) <- names(data_list)
 
-# 4. Ergebnisse ausgeben
-performance_list <- map(results, "performance")
-performance_df <- as.data.frame(performance_list)
-colnames(performance_df) <- names(data_list)
-print(performance_df)
+# 4. Performance-Ergebnisse extrahieren und anzeigen
+performance_list <- map(results, "performance")           # Performance-Metriken extrahieren
+performance_df <- as.data.frame(performance_list)         # In DataFrame umwandeln
+colnames(performance_df) <- names(data_list)             # Spaltennamen setzen
+print(performance_df)                                     # Performance ausgeben
 
 # 5. Plots ausgeben
-plots <- map(results, "plot")
-wrap_plots(plots)
+plots <- map(results, "plot")                             # Plots extrahieren
+wrap_plots(plots)                                         # Plots nebeneinander oder übereinander anzeigen
+
 ```
 
 
