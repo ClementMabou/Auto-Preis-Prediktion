@@ -147,6 +147,7 @@ head(fehlende_Werte, n = 8)   # Ausgabe der Top-8 Spalten mit den meisten fehlen
 
 
 ### B.4.2 Fehlende Werte entfernen
+
 ```{r}
 colSums(is.na(cars_df))                             # Zählt, wie viele NA-Werte in jeder Spalte vorkommen
 cars_df <- cars_df[rowSums(is.na(cars_df)) == 0, ]  # Behalte nur Zeilen ohne fehlende Werte (löscht alle mit >=1 NA)
@@ -183,7 +184,7 @@ outlier_counts <- get_outlier_counts(cars_df)  # Hilfsfunktion auf den ursprüng
 print(outlier_counts)                          # Anzahl der Ausreißer pro Spalte vor der Ersetzung ausgeben
 cat("\n\n")                                    # zwei Leerzeilen einfügen, um die Ausgaben zu trennen
 ```
-### B.5.2 Außreiser entfernen
+### B.5.2 Außreiser ersetzen
 
 
 ```{r}
